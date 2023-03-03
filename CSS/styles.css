@@ -52,3 +52,26 @@ body{
                 border: 2px solid black;
                 transform: skewY(8deg)
                 }
+footer {
+    background-image: linear-gradient( orange , yellow);
+    top: 0px;
+    display: flex;
+    justify-content: space-around;
+    position: static;
+    width: 100%;
+    border: 2px solid black;
+}
+    footer nav{
+            margin: auto;
+            justify-content: center;
+            display: inline-block;
+    }
+    footer nav ul li {
+        display: inline;
+        width: 10%;
+        margin-right: 20px; 
+        font-weight: bold; 
+        font-style: italic;
+        padding: auto;
+        text-decoration: none;
+    }

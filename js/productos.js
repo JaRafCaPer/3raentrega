@@ -94,6 +94,7 @@ function actualizarCarrito() {
       <td>${producto.nombre}</td>
       <td>$${producto.precio}</td>
       <td>${producto.cantidad}</td>
+      <td>${producto.cantidad}*$${producto.precio}</td>
     `;
     tablaCarrito.appendChild(fila);
   });
@@ -111,10 +112,22 @@ function agregarAlCarrito(idProducto) {
   const producto = listaProd.find(producto => producto.id === idProducto);
   const cantidad = parseInt(document.getElementById(`c-${idProducto}`).value);
   if (!cantidad) return; // Si la cantidad es 0 o no es un número, no hacemos nada
-  producto.cantidad = cantidad;
-  carrito.push(producto);
+  
+  // Buscamos si el producto ya está en el carrito
+  const productoEnCarrito = carrito.find(producto => producto.id === idProducto);
+  
+  if (productoEnCarrito) {
+    // Si el producto ya está en el carrito, actualizamos la cantidad
+    productoEnCarrito.cantidad += cantidad;
+  } else {
+    // Si el producto no está en el carrito, lo agregamos
+    producto.cantidad = cantidad;
+    carrito.push(producto);
+  }
+  
   actualizarCarrito();
 }
+
 
 // Agregamos un evento al botón "Limpiar carrito" para vaciar el carrito y actualizar la tabla
 document.getElementById('limpiar-carrito').addEventListener('click', function() {
