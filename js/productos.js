@@ -2,19 +2,31 @@
 let idProducto = 1;
 let totalCompra = 0;
 
+
 // Obtenemos los elementos del formulario
 const formulario = document.querySelector('form');
 const inputNombre = formulario.querySelector('#nombre');
 const inputPrecio = formulario.querySelector('#precio');
 const inputDescripcion = formulario.querySelector('#descripcion');
 const listaProd = [];
-const carrito = [];
 
 // Obtenemos el elemento UL donde se mostrarán los productos
 const listaArticulos = document.getElementById('lista-articulos');
 
 // Obtenemos la tabla donde se mostrará el carrito
 const tablaCarrito = document.getElementById('tabla-carrito');
+
+// Obtenemos el carrito guardado en el localStorage y lo cargamos en la variable carrito
+const carritoGuardado = JSON.parse(localStorage.getItem('carrito'));
+const carrito = carritoGuardado || [];
+
+// Función para actualizar el carrito en el localStorage
+function actualizarCarritoLocalStorage() {
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+
+// Actualizamos la tabla del carrito y cargamos el carrito guardado en el localStorage
+actualizarCarrito();
 
 // Función para crear un nuevo artículo
 function crearArticulo(nombre, precio, descripcion) {
@@ -31,7 +43,7 @@ function crearArticulo(nombre, precio, descripcion) {
     cantidad: 1 // Establecemos la cantidad en 1 por defecto
   };
   listaProd.push(producto);
-  
+
   // Creamos el HTML para mostrar la información del artículo
   const contenidoHTML = `
     <div class="card w-100 bg-dark text-white" style="width: 18rem;">
@@ -89,6 +101,9 @@ function actualizarCarrito() {
   // Actualizamos el total de la compra
   totalCompra = carrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
   document.getElementById('total-compra').textContent = `$${totalCompra.toFixed(2)}`;
+
+  // Actualizamos el carrito en el localStorage
+  actualizarCarritoLocalStorage();
 }
 
 // Agregamos un evento al botón "Agregar al carrito" de cada producto para agregarlo al carrito
