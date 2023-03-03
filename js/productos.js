@@ -13,6 +13,9 @@ const carrito = [];
 // Obtenemos el elemento UL donde se mostrarán los productos
 const listaArticulos = document.getElementById('lista-articulos');
 
+// Obtenemos la tabla donde se mostrará el carrito
+const tablaCarrito = document.getElementById('tabla-carrito');
+
 // Función para crear un nuevo artículo
 function crearArticulo(nombre, precio, descripcion) {
   // Creamos un nuevo elemento LI
@@ -27,20 +30,20 @@ function crearArticulo(nombre, precio, descripcion) {
     descripcion: descripcion,
     cantidad: 1 // Establecemos la cantidad en 1 por defecto
   };
-  listaProd.push(producto)
-  console.log(listaProd)
+  listaProd.push(producto);
+  
   // Creamos el HTML para mostrar la información del artículo
   const contenidoHTML = `
-  <div class="card w-100" style="width: 18rem;">
-    <div class="card-body">
-      <h4 class="card-title">${producto.nombre}</h4>
-      <p class="card-text">Precio: $${producto.precio}</p>
-      <p class="card-text">${producto.descripcion}</p>
-      <input type="number" class="form-control w-25" id="c-${producto.id}" name="cantidad"><br>
-      <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip" title="Mover a deseados">Me gusta</button>
-      <a href="#" id="p-${producto.id}" class="btn btn-info btn-sm mb-2" data-mdb-toggle="tooltip" title="Agregar al carrito">Agregar</a>
+    <div class="card w-100" style="width: 18rem;">
+      <div class="card-body">
+        <h4 class="card-title">${producto.nombre}</h4>
+        <p class="card-text">Precio: $${producto.precio}</p>
+        <p class="card-text">${producto.descripcion}</p>
+        <input type="number" class="form-control w-25" id="c-${producto.id}" name="cantidad"><br>
+        <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip" title="Mover a deseados">Me gusta</button>
+        <a href="#" id="p-${producto.id}" class="btn btn-info btn-sm mb-2" data-mdb-toggle="tooltip" title="Agregar al carrito">Agregar</a>
+      </div>
     </div>
-  </div>
   `;
 
   // Agregamos el HTML al LI
@@ -52,11 +55,10 @@ function crearArticulo(nombre, precio, descripcion) {
   // Limpiamos el formulario
   formulario.reset();
 
-const btnAgregar = document.getElementById(`p-${producto.id}`);
-btnAgregar.addEventListener("click", () => {
-  agregarAlCarrito(producto.id)
-  console.log(carrito)
-})
+  const btnAgregar = document.getElementById(`p-${producto.id}`);
+  btnAgregar.addEventListener("click", () => {
+    agregarAlCarrito(producto.id);
+  });
 }
 
 // Agregamos un evento al botón "Crear artículo" para crear un nuevo artículo
@@ -68,57 +70,39 @@ document.getElementById('crear-articulo').addEventListener('click', function(eve
   crearArticulo(nombre, precio, descripcion);
 });
 
-//agregamos productos al carrito
-function agregarAlCarrito(id) {
-  const producto = listaProd.find((producto) => producto.id === id);
-  const productoEnCarrito = carrito.find((producto) => producto.id === id);
-  const cantidad = parseInt(document.getElementById(`c-${producto.id}`).value);
+// Función para actualizar la tabla del carrito
+function actualizarCarrito() {
+  // Limpiamos la tabla del carrito
+  tablaCarrito.innerHTML = '';
 
-  if (productoEnCarrito) {
-    alert("Item duplicado")
-  }
-  else{
-    carrito.push({...producto, cantidad: cantidad});
-    totalCompra += cantidad * producto.precio;
-    actualizarCarrito();
-  }
-}
-// Mostramos el carrito
-const btnRealizarCompra = document.getElementById('realizar-compra');
-const divCarrito = document.getElementById('carrito');
-const listaCarrito = document.getElementById('lista-carrito');
-
-btnRealizarCompra.addEventListener('click', () => {
-  // Mostrar el contenido del carrito
-  divCarrito.style.display = 'block';
-
-  // Limpiar la lista de elementos de carrito
-  listaCarrito.innerHTML = '';
-
-  // Agregar los elementos del carrito a la lista
-  carrito.forEach((producto) => {
-    const li = document.createElement('li');
-    li.classList.add('list-group-item');
-    li.innerHTML = `
-      <div class="d-flex justify-content-between align-items-center">
-        <span>${producto.nombre}</span>
-        <span>$${producto.precio}</span>
-      </div>
+  // Creamos las filas de la tabla con la información de los productos en el carrito
+  carrito.forEach(producto => {
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${producto.nombre}</td>
+      <td>$${producto.precio}</td>
+      <td>${producto.cantidad}</td>
     `;
-    listaCarrito.appendChild(li);
+    tablaCarrito.appendChild(fila);
   });
-});
 
-//Vaciar el carrito
-const btnVaciarCarrito = document.getElementById('vaciar-carrito');
+  // Actualizamos el total de la compra
+  totalCompra = carrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
+  document.getElementById('total-compra').textContent = `$${totalCompra.toFixed(2)}`;
+}
 
-btnVaciarCarrito.addEventListener('click', () => {
-  // Limpiar el carrito
+// Agregamos un evento al botón "Agregar al carrito" de cada producto para agregarlo al carrito
+function agregarAlCarrito(idProducto) {
+  const producto = listaProd.find(producto => producto.id === idProducto);
+  const cantidad = parseInt(document.getElementById(`c-${idProducto}`).value);
+  if (!cantidad) return; // Si la cantidad es 0 o no es un número, no hacemos nada
+  producto.cantidad = cantidad;
+  carrito.push(producto);
+  actualizarCarrito();
+}
+
+// Agregamos un evento al botón "Limpiar carrito" para vaciar el carrito y actualizar la tabla
+document.getElementById('limpiar-carrito').addEventListener('click', function() {
   carrito.length = 0;
-
-  // Ocultar el contenido del carrito
-  divCarrito.style.display = 'none';
-
-  // Limpiar la lista de elementos de carrito
-  listaCarrito.innerHTML = '';
+  actualizarCarrito();
 });
