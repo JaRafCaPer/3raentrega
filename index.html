@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiales necesarios ROL</title>
+    <title>Creacion y compra de productos</title>
     <link rel="stylesheet" href="./CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
@@ -78,25 +78,26 @@
             <ul class="list-group w-75" id="lista-articulos"></ul>
           </div>
         </div>
-        <div class="col-lg-6">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-carrito">
-              <!-- Aquí se mostrarán los productos en el carrito -->
-            </tbody>
-          </table>
-          
-          <p>Total de la compra: <span id="total-compra">$0.00</span></p>
-          
-          <button type="button" class="btn btn-danger" id="limpiar-carrito">Limpiar carrito</button>
-          
+        <div class="card col-lg-6 h-75 bg-warning">
+          <h5 class="card-header">Tu Carrito de compras</h5>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-carrito">
+                <!-- Aquí se mostrarán los productos en el carrito -->
+              </tbody>
+            </table>
+            <p>Total de la compra: <span id="total-compra">$0.00</span></p>
+            <button type="button" class="btn btn-danger" id="limpiar-carrito">Limpiar carrito</button>
+            <a href="#" class="btn btn-info">Pagar</a>
           </div>
+        </div>
         </div>
       </div>
     </div>

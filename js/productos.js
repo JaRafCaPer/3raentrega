@@ -34,7 +34,7 @@ function crearArticulo(nombre, precio, descripcion) {
   
   // Creamos el HTML para mostrar la información del artículo
   const contenidoHTML = `
-    <div class="card w-100" style="width: 18rem;">
+    <div class="card w-100 bg-dark text-white" style="width: 18rem;">
       <div class="card-body">
         <h4 class="card-title">${producto.nombre}</h4>
         <p class="card-text">Precio: $${producto.precio}</p>
