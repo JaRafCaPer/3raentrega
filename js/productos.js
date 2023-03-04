@@ -89,12 +89,13 @@ function actualizarCarrito() {
 
   // Creamos las filas de la tabla con la información de los productos en el carrito
   carrito.forEach(producto => {
-    const fila = document.createElement('tr');
+    const fila = document.createElement('tr')
+    const subtotal = parseInt(producto.cantidad) * parseInt(producto.precio);
     fila.innerHTML = `
       <td>${producto.nombre}</td>
       <td>$${producto.precio}</td>
       <td>${producto.cantidad}</td>
-      <td>${producto.cantidad}*$${producto.precio}</td>
+      <td>$${subtotal}</td>
     `;
     tablaCarrito.appendChild(fila);
   });
