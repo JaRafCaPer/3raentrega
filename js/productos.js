@@ -2,7 +2,6 @@
 let idProducto = 1;
 let totalCompra = 0;
 
-
 // Obtenemos los elementos del formulario
 const formulario = document.querySelector('form');
 const inputNombre = formulario.querySelector('#nombre');
@@ -82,6 +81,18 @@ document.getElementById('crear-articulo').addEventListener('click', function(eve
   crearArticulo(nombre, precio, descripcion);
 });
 
+// Función para eliminar un producto del carrito
+function eliminarProducto(idProducto) {
+  // Buscamos el producto en el carrito
+  const index = carrito.findIndex(producto => producto.id === idProducto);
+  if (index !== -1) {
+    // Si encontramos el producto, lo eliminamos
+    carrito.splice(index, 1);
+    // Actualizamos la tabla del carrito y el total de la compra
+    actualizarCarrito();
+  }
+}
+
 // Función para actualizar la tabla del carrito
 function actualizarCarrito() {
   // Limpiamos la tabla del carrito
@@ -96,6 +107,7 @@ function actualizarCarrito() {
       <td>$${producto.precio}</td>
       <td>${producto.cantidad}</td>
       <td>$${subtotal}</td>
+      <td><button type="button" class="btn btn-danger btn-sm" id="q-${producto.id}" data-mdb-toggle="tooltip" title="Quitar producto">Quitar</button></td>
     `;
     tablaCarrito.appendChild(fila);
   });
@@ -106,6 +118,14 @@ function actualizarCarrito() {
 
   // Actualizamos el carrito en el localStorage
   actualizarCarritoLocalStorage();
+
+// Agregamos un evento a cada botón "Quitar producto"
+carrito.forEach(producto => {
+  const btnQuitar = document.getElementById(`q-${producto.id}`);
+  btnQuitar.addEventListener("click", () => {
+    eliminarProducto(producto.id);
+  });
+});
 }
 
 // Agregamos un evento al botón "Agregar al carrito" de cada producto para agregarlo al carrito
@@ -113,10 +133,9 @@ function agregarAlCarrito(idProducto) {
   const producto = listaProd.find(producto => producto.id === idProducto);
   const cantidad = parseInt(document.getElementById(`c-${idProducto}`).value);
   if (!cantidad) return; // Si la cantidad es 0 o no es un número, no hacemos nada
-  
+
   // Buscamos si el producto ya está en el carrito
   const productoEnCarrito = carrito.find(producto => producto.id === idProducto);
-  
   if (productoEnCarrito) {
     // Si el producto ya está en el carrito, actualizamos la cantidad
     productoEnCarrito.cantidad += cantidad;
@@ -125,13 +144,18 @@ function agregarAlCarrito(idProducto) {
     producto.cantidad = cantidad;
     carrito.push(producto);
   }
-  
   actualizarCarrito();
 }
 
-
 // Agregamos un evento al botón "Limpiar carrito" para vaciar el carrito y actualizar la tabla
 document.getElementById('limpiar-carrito').addEventListener('click', function() {
+  carrito.length = 0;
+  actualizarCarrito();
+});
+
+// Agregamos un evento al botón "Limpiar carrito" para vaciar el carrito y actualizar la tabla
+document.getElementById('pagar').addEventListener('click', function() {
+  alert('Gracias por su compra');
   carrito.length = 0;
   actualizarCarrito();
 });
